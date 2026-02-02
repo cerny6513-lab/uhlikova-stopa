@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulačka Uhlíkové Stopy</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Přihlašovací obrazovka -->
+    <div id="login-screen" class="screen">
+        <div class="login-container">
+            <div class="logo">
+                <i class="fas fa-leaf"></i>
+                <h1>Uhlíková Stopa</h1>
+            </div>
+            <div class="login-form">
+                <h2>Přihlášení</h2>
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="email" id="login-email" placeholder="E-mail" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="login-password" placeholder="Heslo" required>
+                </div>
+                <button id="login-btn" class="btn-primary">Přihlásit se</button>
+                <div class="divider">nebo</div>
+                <button id="register-toggle" class="btn-secondary">Vytvořit účet</button>
+                <p class="info-text">Sledujte svou uhlíkovou stopu a pomozte planetě!</p>
+            </div>
+            
+            <div class="register-form hidden">
+                <h2>Registrace</h2>
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="register-name" placeholder="Jméno" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="register-email" placeholder="E-mail" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="register-password" placeholder="Heslo" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="register-confirm" placeholder="Potvrzení hesla" required>
+                </div>
+                <button id="register-btn" class="btn-primary">Registrovat</button>
+                <div class="divider">nebo</div>
+                <button id="login-toggle" class="btn-secondary">Zpět na přihlášení</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hlavní obrazovka aplikace -->
+    <div id="app-screen" class="screen hidden">
+        <header>
+            <div class="header-content">
+                <div class="logo-small">
+                    <i class="fas fa-leaf"></i>
+                    <span>Uhlíková Stopa</span>
+                </div>
+                <div class="user-info">
+                    <span id="user-name"></span>
+                    <button id="logout-btn" class="btn-logout">
+                        <i class="fas fa-sign-out-alt"></i> Odhlásit
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <div class="dashboard">
+                <div class="summary-card">
+                    <h2><i class="fas fa-chart-line"></i> Vaše uhlíková stopa</h2>
+                    <div class="carbon-total">
+                        <span id="total-carbon">0</span>
+                        <span class="unit">kg CO₂ / týden</span>
+                    </div>
+                    <div class="carbon-progress">
+                        <div class="progress-bar">
+                            <div id="carbon-progress" class="progress-fill"></div>
+                        </div>
+                        <div class="progress-labels">
+                            <span>Nízká</span>
+                            <span>Střední</span>
+                            <span>Vysoká</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="activities-container">
+                    <h2><i class="fas fa-walking"></i> Doprava</h2>
+                    <div class="activities-grid">
+                        <div class="activity-card" data-type="walk" data-carbon="0">
+                            <div class="activity-icon green">
+                                <i class="fas fa-walking"></i>
+                            </div>
+                            <h3>Chůze</h3>
+                            <p class="activity-desc">0 kg CO₂ / km</p>
+                            <div class="activity-controls">
+                                <button class="btn-remove" data-type="walk"><i class="fas fa-minus"></i></button>
+                                <span class="activity-count" id="walk-count">0</span>
+                                <button class="btn-add" data-type="walk"><i class="fas fa-plus"></i></button>
+                            </div>
+                            <p class="activity-unit">km / týden</p>
+                        </div>
+
+                        <div class="activity-card" data-type="mhd" data-carbon="0.05">
+                            <div class="activity-icon yellow">
+                                <i class="fas fa-bus"></i>
+                            </div>
+                            <h3>MHD</h3>
+                            <p class="activity-desc">0.05 kg CO₂ / km</p>
+                            <div class="activity-controls">
+                                <button class="btn-remove" data-type="mhd"><i class="fas fa-minus"></i></button>
+                                <span class="activity-count" id="mhd-count">0</span>
+                                <button class="btn-add" data-type="mhd"><i class="fas fa-plus"></i></button>
+                            </div>
+                            <p class="activity-unit">km / týden</p>
+                        </div>
+
+                        <div class="activity-card" data-type="car" data-carbon="0.2">
+                            <div class="activity-icon red">
+                                <i class="fas fa-car"></i>
+                            </div>
+                            <h3>Auto</h3>
+                            <p class="activity-desc">0.2 kg CO₂ / km</p>
+                            <div class="activity-controls">
+                                <button class="btn-remove" data-type="car"><i class="fas fa-minus"></i></button>
+                                <span class="activity-count" id="car-count">0</span>
+                                <button class="btn-add" data-type="car"><i class="fas fa-plus"></i></button>
+                            </div>
+                            <p class="activity-unit">km / týden</p>
+                        </div>
+                    </div>
+
+                    <h2><i class="fas fa-utensils"></i> Stravování</h2>
+                    <div class="activities-grid">
+                        <div class="activity-card" data-type="home-food" data-carbon="0.5">
+                            <div class="activity-icon green">
+                                <i class="fas fa-home"></i>
+                            </div>
+                            <h3>Domácí jídlo</h3>
+                            <p class="activity-desc">0.5 kg CO₂ / jídlo</p>
+                            <div class="activity-controls">
+                                <button class="btn-remove" data-type="home-food"><i class="fas fa-minus"></i></button>
+                                <span class="activity-count" id="home-food-count">0</span>
+                                <button class="btn-add" data-type="home-food"><i class="fas fa-plus"></i></button>
+                            </div>
+                            <p class="activity-unit">jídel / týden</p>
+                        </div>
+
+                        <div class="activity-card" data-type="store-food" data-carbon="1.5">
+                            <div class="activity-icon yellow">
+                                <i class="fas fa-shopping-bag"></i>
+                            </div>
+                            <h3>Kupované jídlo</h3>
+                            <p class="activity-desc">1.5 kg CO₂ / jídlo</p>
+                            <div class="activity-controls">
+                                <button class="btn-remove" data-type="store-food"><i class="fas fa-minus"></i></button>
+                                <span class="activity-count" id="store-food-count">0</span>
+                                <button class="btn-add" data-type="store-food"><i class="fas fa-plus"></i></button>
+                            </div>
+                            <p class="activity-unit">jídel / týden</p>
+                        </div>
+
+                        <div class="activity-card" data-type="fastfood" data-carbon="3">
+                            <div class="activity-icon red">
+                                <i class="fas fa-hamburger"></i>
+                            </div>
+                            <h3>Fastfood</h3>
+                            <p class="activity-desc">3 kg CO₂ / jídlo</p>
+                            <div class="activity-controls">
+                                <button class="btn-remove" data-type="fastfood"><i class="fas fa-minus"></i></button>
+                                <span class="activity-count" id="fastfood-count">0</span>
+                                <button class="btn-add" data-type="fastfood"><i class="fas fa-plus"></i></button>
+                            </div>
+                            <p class="activity-unit">jídel / týden</p>
+                        </div>
+                    </div>
+
+                    <h2><i class="fas fa-lightbulb"></i> Další aktivity</h2>
+                    <div class="activities-grid">
+                        <div class="activity-card" data-type="energy" data-carbon="0.1">
+                            <div class="activity-icon blue">
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            <h3>Energie doma</h3>
+                            <p class="activity-desc">0.1 kg CO₂ / kWh</p>
+                            <div class="activity-controls">
+                                <button class="btn-remove" data-type="energy"><i class="fas fa-minus"></i></button>
+                                <span class="activity-count" id="energy-count">0</span>
+                                <button class="btn-add" data-type="energy"><i class="fas fa-plus"></i></button>
+                            </div>
+                            <p class="activity-unit">kWh / týden</p>
+                        </div>
+
+                        <div class="activity-card" data-type="recycling" data-carbon="-0.3">
+                            <div class="activity-icon green">
+                                <i class="fas fa-recycle"></i>
+                            </div>
+                            <h3>Recyklace</h3>
+                            <p class="activity-desc">-0.3 kg CO₂ / týden</p>
+                            <div class="activity-controls">
+                                <button class="btn-remove" data-type="recycling"><i class="fas fa-minus"></i></button>
+                                <span class="activity-count" id="recycling-count">0</span>
+                                <button class="btn-add" data-type="recycling"><i class="fas fa-plus"></i></button>
+                            </div>
+                            <p class="activity-unit">týdnů</p>
+                        </div>
+
+                        <div class="activity-card" data-type="shopping" data-carbon="2">
+                            <div class="activity-icon orange">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <h3>Nákupy</h3>
+                            <p class="activity-desc">2 kg CO₂ / nákup</p>
+                            <div class="activity-controls">
+                                <button class="btn-remove" data-type="shopping"><i class="fas fa-minus"></i></button>
+                                <span class="activity-count" id="shopping-count">0</span>
+                                <button class="btn-add" data-type="shopping"><i class="fas fa-plus"></i></button>
+                            </div>
+                            <p class="activity-unit">nákupů / týden</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="history-card">
+                    <h2><i class="fas fa-history"></i> Historie</h2>
+                    <div class="history-list" id="history-list">
+                        <!-- Historie se naplní dynamicky -->
+                    </div>
+                    <button id="reset-btn" class="btn-secondary">
+                        <i class="fas fa-redo"></i> Resetovat týden
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>© 2023 Kalkulačka Uhlíkové Stopy | Pomáháme snížit emise CO₂</p>
+        </footer>
+    </div>
+
+    <div id="notification" class="notification hidden"></div>
+
+    <script src="auth.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
